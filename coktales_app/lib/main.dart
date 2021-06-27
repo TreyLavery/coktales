@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import "dart:math";
 
 void main() {
   runApp(MyApp());
@@ -22,7 +23,7 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
+      home: MyHomePage(title: 'coktales'),
     );
   }
 }
@@ -48,16 +49,6 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
 
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -71,43 +62,202 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         // Here we take the value from the MyHomePage object that was created by
         // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
+        title: Text('coktales'),
       ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
+      body: MyCustomForm(),
+      // Center(
+      //   // Center is a layout widget. It takes a single child and positions it
+      //   // in the middle of the parent.
+      //   child: Column(
+      //     // Column is also a layout widget. It takes a list of children and
+      //     // arranges them vertically. By default, it sizes itself to fit its
+      //     // children horizontally, and tries to be as tall as its parent.
+      //     //
+      //     // Invoke "debug painting" (press "p" in the console, choose the
+      //     // "Toggle Debug Paint" action from the Flutter Inspector in Android
+      //     // Studio, or the "Toggle Debug Paint" command in Visual Studio Code)
+      //     // to see the wireframe for each widget.
+      //     //
+      //     // Column has various properties to control how it sizes itself and
+      //     // how it positions its children. Here we use mainAxisAlignment to
+      //     // center the children vertically; the main axis here is the vertical
+      //     // axis because Columns are vertical (the cross axis would be
+      //     // horizontal).
+      //     mainAxisAlignment: MainAxisAlignment.center,
+      //     children: <Widget>[
+      //       Text(
+      //         'You have pushed the button this many times:',
+      //       ),
+      //       Text(
+      //         '$_counter',
+      //         style: Theme.of(context).textTheme.headline4,
+      //       ),
+      //     ],
+      //   ),
+      // ),
+      // This trailing comma makes auto-formatting nicer for build methods.
+    );
+  }
+}
+
+class MyCustomForm extends StatefulWidget {
+  @override
+  MyCustomFormState createState() {
+    return MyCustomFormState();
+  }
+}
+
+class MyCustomFormState extends State<MyCustomForm> {
+
+  final liquorController = TextEditingController();
+  List<String> liquors = [];
+  final mixerController = TextEditingController();
+  List<String> mixers = [];
+  final syrupController = TextEditingController();
+  List<String> syrups = [];
+  final wildController = TextEditingController();
+  List<String> wilds = [];
+  final garnishController = TextEditingController();
+  List<String> garnishes = [];
+
+  final addButtonStyle = TextButton.styleFrom(
+    primary: Colors.white,
+    backgroundColor: Colors.green,
+    padding: new EdgeInsets.all(15)
+  );
+
+  Widget generateList(context, list){
+    return ListView.builder(
+        shrinkWrap: true,
+        itemCount: list.length,
+        itemBuilder: (context, index){
+          return Padding(padding: EdgeInsets.symmetric(horizontal: 8),
+          child: Text(list[index]));
+        }
+    );
+  }
+
+  Widget generateSection(context, name, controller, list){
+    return Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: <Widget>[
+          Expanded(child:
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+            child: TextField(
+              onSubmitted: (value){
+                setState(() {
+                  list.add(controller.text);
+                });
+                controller.clear();
+              },
+              controller: controller,
+              decoration: InputDecoration(
+                border: UnderlineInputBorder(),
+                labelText: name,
+              ),
+            ),
+          )
+          ),
+          Padding(
+              padding: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+              child: new TextButton(
+                  style: addButtonStyle,
+                  onPressed: () {
+                    setState(() {
+                      list.add(controller.text);
+                      //liquors = liquors.add(Text(liquorController.text));
+                    });
+                    controller.clear();
+                  },
+                  child: const Text('ADD'))
+          ),
+        ]
+    );
+  }
+
+  generateDrink(){
+    final _random = new Random();
+    List drink = [];
+    drink.add(liquors[_random.nextInt(liquors.length)]);
+    drink.add(mixers[_random.nextInt(mixers.length)]);
+    drink.add(syrups[_random.nextInt(syrups.length)]);
+    drink.add(wilds[_random.nextInt(wilds.length)]);
+    drink.add(garnishes[_random.nextInt(garnishes.length)]);
+    return drink;
+  }
+
+
+  @override
+  void dispose() {
+    liquorController.dispose();
+    mixerController.dispose();
+    syrupController.dispose();
+    wildController.dispose();
+    garnishController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return new SingleChildScrollView(
         child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Invoke "debug painting" (press "p" in the console, choose the
-          // "Toggle Debug Paint" action from the Flutter Inspector in Android
-          // Studio, or the "Toggle Debug Paint" command in Visual Studio Code)
-          // to see the wireframe for each widget.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headline4,
-            ),
-          ],
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: <Widget>[
+        generateSection(context, 'Add Liquors', liquorController, liquors),
+        generateList(context,liquors),
+        generateSection(context, 'Add mixers', mixerController, mixers),
+        generateList(context,mixers),
+        generateSection(context, 'Add syrup/Juices', syrupController, syrups),
+        generateList(context,syrups),
+        generateSection(context, 'Add wild card items', wildController, wilds),
+        generateList(context,wilds),
+        generateSection(context, 'Add garnish', garnishController, garnishes),
+        generateList(context,garnishes),
+        Center(
+          child: TextButton(
+              style: TextButton.styleFrom(
+                primary: Colors.white,
+                backgroundColor: Colors.blueAccent,
+                padding: new EdgeInsets.all(15),
+                textStyle: TextStyle(fontSize: 30),
+                ),
+              onPressed: () {
+                showDialog(
+                  context: context,
+                  builder: (context) {
+                    return AlertDialog(
+                      content: Text(generateDrink().toString()),
+                     );
+                   }
+                  );
+                },
+              child: const Text('Generate'))
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+        Center(
+          child: TextButton(
+              style: TextButton.styleFrom(
+                        primary: Colors.white,
+                        backgroundColor: Colors.redAccent,
+                        padding: new EdgeInsets.all(15),
+                        textStyle: TextStyle(fontSize: 20),
+              ),
+              onPressed: () {
+                setState(() {
+                  liquors.clear();
+                  mixers.clear();
+                  garnishes.clear();
+                  syrups.clear();
+                  wilds.clear();
+                });
+              },
+              child: const Text('Clear All'),
+
+            )
+        )
+      ],
+    )
     );
   }
 }
