@@ -1,6 +1,6 @@
 # coktales_app
 
-A new Flutter application.
+A simple application for the coktales drinking game
 
 ## Getting Started
 
